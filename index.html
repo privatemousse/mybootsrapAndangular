@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ui.bootstrap.demo">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Bootstrap 101 Template</title>
+    <!-- Bootstrap -->
+    <link href="css\bootstrap-3.3.6-dist\css\bootstrap2.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+    .full button span {
+        background-color: limegreen;
+        border-radius: 32px;
+        color: black;
+    }
+    
+    .partially button span {
+        background-color: orange;
+        border-radius: 32px;
+        color: black;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- ****************************************************************************************************************************
+              Accordion 
+     -->
+    <div ng-controller="AccordionDemoCtrl">
+        <script type="text/ng-template" id="group-template.html">
+            <div class="panel {{panelClass || 'panel-default'}}">
+                <div class="panel-heading">
+                    <h4 class="panel-title" style="color:#fa39c3">
+          <a href tabindex="0" class="accordion-toggle" ng-click="toggleOpen()" uib-accordion-transclude="heading"><span
+            ng-class="{'text-muted': isDisabled}">{{heading}}</span></a>
+        </h4>
+                </div>
+                <div class="panel-collapse collapse" uib-collapse="!isOpen">
+                    <div class="panel-body" style="text-align: right" ng-transclude></div>
+                </div>
+            </div>
+        </script>
+        <p>
+            <button type="button" class="btn btn-default btn-sm" ng-click="status.open = !status.open">Toggle last panel</button>
+            <button type="button" class="btn btn-default btn-sm" ng-click="status.isFirstDisabled = ! status.isFirstDisabled">Enable / Disable first panel</button>
+        </p>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-model="oneAtATime"> Open only one at a time
+            </label>
+        </div>
+        <uib-accordion close-others="oneAtATime">
+            <uib-accordion-group heading="Static Header, initially expanded" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+                This content is straight in the template.
+            </uib-accordion-group>
+            <uib-accordion-group heading="{{group.title}}" ng-repeat="group in groups">
+                {{group.content}}
+            </uib-accordion-group>
+            <uib-accordion-group heading="Dynamic Body Content">
+                <p>The body of the uib-accordion group grows to fit the contents</p>
+                <button type="button" class="btn btn-default btn-sm" ng-click="addItem()">Add Item</button>
+                <div ng-repeat="item in items">{{item}}</div>
+            </uib-accordion-group>
+            <uib-accordion-group heading="Custom template" template-url="group-template.html">
+                Hello
+            </uib-accordion-group>
+            <uib-accordion-group heading="Delete account" panel-class="panel-danger">
+                <p>Please, to delete your account, click the button below</p>
+                <button class="btn btn-danger">Delete</button>
+            </uib-accordion-group>
+            <uib-accordion-group is-open="status.open">
+                <uib-accordion-heading>
+                    I can have markup, too! <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                </uib-accordion-heading>
+                This is just some content to illustrate fancy headings.
+            </uib-accordion-group>
+        </uib-accordion>
+    </div>
+    <br>
+    <br>
+    <!-- ****************************************************************************************************************************
+              alert
+     -->
+    <div ng-controller="AlertDemoCtrl">
+        <script type="text/ng-template" id="alert.html">
+            <div class="alert" style="background-color:#fa39c3;color:white" role="alert">
+                <div ng-transclude></div>
+            </div>
+        </script>
+        <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
+        <uib-alert template-url="alert.html">A happy alert!</uib-alert>
+        <button type="button" class='btn btn-default' ng-click="addAlert()">Add Alert</button>
+    </div>
+    <!-- ****************************************************************************************************************************
+              Buttons
+     -->
+    <div ng-controller="ButtonsCtrl">
+        <h4>Single toggle</h4>
+        <pre>{{singleModel}}</pre>
+        <button type="button" class="btn btn-primary" ng-model="singleModel" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0">
+            Single Toggle
+        </button>
+        <h4>Checkbox</h4>
+        <pre>Model: {{checkModel}}</pre>
+        <pre>Results: {{checkResults}}</pre>
+        <div class="btn-group">
+            <label class="btn btn-primary" ng-model="checkModel.left" uib-btn-checkbox>Left</label>
+            <label class="btn btn-primary" ng-model="checkModel.middle" uib-btn-checkbox>Middle</label>
+            <label class="btn btn-primary" ng-model="checkModel.right" uib-btn-checkbox>Right</label>
+        </div>
+        <h4>Radio &amp; Uncheckable Radio</h4>
+        <pre>{{radioModel || 'null'}}</pre>
+        <div class="btn-group">
+            <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'Left'">Left</label>
+            <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'Middle'">Middle</label>
+            <label class="btn btn-primary" ng-model="radioModel" uib-btn-radio="'Right'">Right</label>
+        </div>
+        <div class="btn-group">
+            <label class="btn btn-success" ng-model="radioModel" uib-btn-radio="'Left'" uncheckable>Left</label>
+            <label class="btn btn-success" ng-model="radioModel" uib-btn-radio="'Middle'" uncheckable>Middle</label>
+            <label class="btn btn-success" ng-model="radioModel" uib-btn-radio="'Right'" uncheckable>Right</label>
+        </div>
+    </div>
+    <!-- ****************************************************************************************************************************
+             Carousel
+     -->
+    <div ng-controller="CarouselDemoCtrl">
+        <div style="height: 305px">
+            <uib-carousel interval="myInterval" no-wrap="noWrapSlides">
+                <uib-slide ng-repeat="slide in slides" active="slide.active">
+                    <img ng-src="{{slide.image}}" style="margin:auto;">
+                    <div class="carousel-caption">
+                        <h4>Slide {{$index}}</h4>
+                        <p>{{slide.text}}</p>
+                    </div>
+                </uib-slide>
+            </uib-carousel>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <button type="button" class="btn btn-info" ng-click="addSlide()">Add Slide</button>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="noWrapSlides"> Disable Slide Looping
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                Interval, in milliseconds:
+                <input type="number" class="form-control" ng-model="myInterval">
+                <br />Enter a negative number or 0 to stop the interval.
+            </div>
+        </div>
+    </div>
+    <!-- ****************************************************************************************************************************
+            Collapse 
+     -->
+    <div ng-controller="CollapseDemoCtrl">
+        <button type="button" class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Toggle collapse</button>
+        <hr>
+        <div uib-collapse="isCollapsed">
+            <div class="well well-lg">Some content</div>
+        </div>
+    </div>
+    <!-- ****************************************************************************************************************************
+           Datepicker 
+     -->
+    <div ng-controller="DatepickerDemoCtrl">
+        <pre>Selected date is: <em>{{dt | date:'fullDate' }}</em></pre>
+        <h4>Inline</h4>
+        <div style="display:inline-block; min-height:290px;">
+            <uib-datepicker ng-model="dt" min-date="minDate" show-weeks="true" class="well well-sm" custom-class="getDayClass(date, mode)"></uib-datepicker>
+        </div>
+        <h4>Popup</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <p class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="input-group">
+                    <input type="date" class="form-control" uib-datepicker-popup ng-model="dt" is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Format:</label>
+                <select class="form-control" ng-model="format" ng-options="f for f in formats">
+                    <option></option>
+                </select>
+            </div>
+        </div>
+        <hr />
+        <button type="button" class="btn btn-sm btn-info" ng-click="today()">Today</button>
+        <button type="button" class="btn btn-sm btn-default" ng-click="setDate(2009, 7, 24)">2009-08-24</button>
+        <button type="button" class="btn btn-sm btn-danger" ng-click="clear()">Clear</button>
+        <button type="button" class="btn btn-sm btn-default" ng-click="toggleMin()" uib-tooltip="After today restriction">Min date</button>
+    </div>
+    <!-- ****************************************************************************************************************************
+           Dropdown
+     -->
+    <div ng-controller="DropdownCtrl">
+        <!-- Simple dropdown -->
+        <span uib-dropdown on-toggle="toggled(open)">
+      <a href id="simple-dropdown" uib-dropdown-toggle>
+        Click me for a dropdown, yo!
+      </a>
+      <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
+        <li ng-repeat="choice in items">
+          <a href>{{choice}}</a>
+        </li>
+      </ul>
+    </span>
+        <!-- Single button -->
+        <div class="btn-group" uib-dropdown is-open="status.isopen">
+            <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+                Button dropdown <span class="caret"></span>
+            </button>
+            <ul class="uib-dropdown-menu" role="menu" aria-labelledby="single-button">
+                <li role="menuitem"><a href="#">Action</a></li>
+                <li role="menuitem"><a href="#">Another action</a></li>
+                <li role="menuitem"><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li role="menuitem"><a href="#">Separated link</a></li>
+            </ul>
+        </div>
+        <!-- Split button -->
+        <div class="btn-group" uib-dropdown>
+            <button id="split-button" type="button" class="btn btn-danger">Action</button>
+            <button type="button" class="btn btn-danger" uib-dropdown-toggle>
+                <span class="caret"></span>
+                <span class="sr-only">Split button!</span>
+            </button>
+            <ul class="uib-dropdown-menu" role="menu" aria-labelledby="split-button">
+                <li role="menuitem"><a href="#">Action</a></li>
+                <li role="menuitem"><a href="#">Another action</a></li>
+                <li role="menuitem"><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li role="menuitem"><a href="#">Separated link</a></li>
+            </ul>
+        </div>
+        <!-- Single button using append-to-body -->
+        <div class="btn-group" uib-dropdown dropdown-append-to-body>
+            <button id="btn-append-to-body" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                Dropdown on Body <span class="caret"></span>
+            </button>
+            <ul class="uib-dropdown-menu" role="menu" aria-labelledby="btn-append-to-body">
+                <li role="menuitem"><a href="#">Action</a></li>
+                <li role="menuitem"><a href="#">Another action</a></li>
+                <li role="menuitem"><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li role="menuitem"><a href="#">Separated link</a></li>
+            </ul>
+        </div>
+        <!-- Single button using template-url -->
+        <div class="btn-group" uib-dropdown>
+            <button id="button-template-url" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+                Dropdown using template <span class="caret"></span>
+            </button>
+            <ul class="uib-dropdown-menu" template-url="dropdown.html" aria-labelledby="button-template-url">
+            </ul>
+        </div>
+        <hr />
+        <p>
+            <button type="button" class="btn btn-default btn-sm" ng-click="toggleDropdown($event)">Toggle button dropdown</button>
+            <button type="button" class="btn btn-warning btn-sm" ng-click="disabled = !disabled">Enable/Disable</button>
+        </p>
+        <hr>
+        <!-- Single button with keyboard nav -->
+        <div class="btn-group" uib-dropdown uib-keyboard-nav>
+            <button id="simple-btn-keyboard-nav" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                Dropdown with keyboard navigation <span class="caret"></span>
+            </button>
+            <ul class="uib-dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                <li role="menuitem"><a href="#">Action</a></li>
+                <li role="menuitem"><a href="#">Another action</a></li>
+                <li role="menuitem"><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li role="menuitem"><a href="#">Separated link</a></li>
+            </ul>
+        </div>
+        <script type="text/ng-template" id="dropdown.html">
+            <ul class="uib-dropdown-menu" role="menu" aria-labelledby="button-template-url">
+                <li role="menuitem"><a href="#">Action in Template</a></li>
+                <li role="menuitem"><a href="#">Another action in Template</a></li>
+                <li role="menuitem"><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li role="menuitem"><a href="#">Separated link in Template</a></li>
+            </ul>
+        </script>
+    </div>
+    <script src="js\angular-1.4.8\angular.js"></script>
+    <script src="js\ui-bootstrap-tpls-0.14.3.js"></script>
+    <script src="js\app.js"></script>
+</body>
+
+</html>
